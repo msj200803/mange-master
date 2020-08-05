@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 配置全限定类名 -->
+<mapper namespace="com.stp.mapper.Table2Mapper">
+    <!-- 填写数据库里的实例对应的表名 -->
+    <sql id="table" >tb_table2</sql>
+    <!--查询所有-->
+    <select id="findAll" resultType="table2">
+        select
+        *
+        from
+        <include refid="table"/>
+    </select>
+
+    <!--根据id查询用户-->
+    <select id="findById" resultType="table2">
+        select
+        *
+        from
+        <include refid="table"/>
+        where
+        id = #{id}
+    </select>
+
+    <!-- 删除用户 -->
+    <delete id="delete">
+        delete from
+        <include refid="table"/>
+        where
+        id = #{id}
+    </delete>
+
+    <!-- 修改用户 -->
+    <update id="update" parameterType="table2">
+        update
+        <include refid="table"/>
+        set
+        id = #{id},EA = #{EA},EB = #{EB},PP = #{PP},PN = #{PN},R1 = #{R1},R2 = #{R2},R3 = #{R3},operator = #{operator},remarks = #{remarks},create_time = #{createTime}
+        where
+        id = #{id}
+    </update>
+
+    <!-- 增加用户 -->
+    <insert id="add" parameterType="table2">
+        insert into
+        <include refid="table"/>
+        (EA,EB,PP,PN,R1,R2,R3,operator,remarks,create_time)
+        values (#{EA},#{EB},#{PP},#{PN},#{R1},#{R2},#{R3},#{operator},#{remarks},#{create_time})
+    </insert>
+</mapper>

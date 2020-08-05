@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 配置全限定类名 -->
+<mapper namespace="com.stp.mapper.Table1Mapper">
+    <!-- 填写数据库里的实例对应的表名 -->
+    <sql id="table" >tb_table1</sql>
+    <!--查询所有-->
+    <select id="findAll" resultType="table1">
+        select
+        *
+        from
+        <include refid="table"/>
+    </select>
+
+    <!--根据id查询用户-->
+    <select id="findByFields" resultType="table1">
+        select
+        *
+        from
+        <include refid="table"/>
+        where
+        fields = #{fields}
+    </select>
+
+    <!-- 删除用户 -->
+    <delete id="delete">
+        delete from
+        <include refid="table"/>
+        where
+        fields = #{fields}
+    </delete>
+
+    <!-- 修改用户 -->
+    <update id="update" parameterType="table1">
+        update
+        <include refid="table"/>
+        set
+        fields = #{fields},element = #{element},whatisthis = #{whatisthis}
+        where
+        fields = #{fields}
+    </update>
+
+    <!-- 增加用户 -->
+    <insert id="add" parameterType="table1">
+        insert into
+        <include refid="table"/>
+        (fields,element,whatisthis)
+        values (#{fields},#{element},#{whatisthis})
+    </insert>
+</mapper>
