@@ -77,7 +77,11 @@ public class CreateTaskController {
         String keys = request.getParameter("keys");
         String authority = request.getParameter("authority");
         Task newWestTask = taskService.getNewWestTask();
+        logger.info(JSONObject.toJSONString(newWestTask));
         // 判断重复提交(比较简易版本)
+        logger.info(name);
+        logger.info(newWestTask.getTaskName());
+        logger.info(String.valueOf(name.equals(newWestTask.getTaskName())));
         if (name.equals(newWestTask.getTaskName())){
             return Result.error("重复提交");
         }
