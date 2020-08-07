@@ -16,6 +16,6 @@ public interface TaskMapper {
     //执行sql建表语句
     @Update("${sql}")
     int createTable(String sql);
-    @Select("select id,task_keys,task_name from admin.tb_task order by create_time desc limit 0,1")
+    @Select("select id,task_keys,task_name from db_label.tb_task order by id desc limit 1")
     Task getNewWestTask();
 }
