@@ -10,9 +10,9 @@ import java.util.List;
 @Component
 public interface GroupMapper {
     // 获取全部的组
-    @Select("select * from  db_label.group")
+    @Select("select * from  db_label.tb_group")
     List<Group> getGroupList();
 
-    @Select("select * from db_label.group a where a.id=#{groupId}")
+    @Select("select * from db_label.tb_group a where a.id=#{groupId}")
     Group getGroupByGroupId(Integer groupId);
 }

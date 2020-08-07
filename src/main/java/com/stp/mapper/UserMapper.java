@@ -10,7 +10,7 @@ import java.util.List;
 @Component
 public interface UserMapper {
     //根据组ID获取用户
-    @Select("select * from db_label.user where is_group_id = #{groupId}")
+    @Select("select * from db_label.tb_user where is_group_id = #{groupId}")
 //    @Results({
 //            @Result(id = true,column = "id",property = "id"),
 //            @Result(column = "user_id",property = "userId"),
@@ -22,7 +22,7 @@ public interface UserMapper {
 //    })
     List<User> getUsersByGroupId(Integer groupId);
     //获取全部的用户
-    @Select("select * from db_label.user")
+    @Select("select * from db_label.tb_user")
     List<User> getUsers();
 
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface TaskMapper {
     //添加任务到任务中心
-    @Insert("insert into db_label.task values(0,#{taskName},#{taskKeys},#{taskCreatUserId},#{taskAuthority},#{taskFileUrl},now(),now(),#{taskTag})")
+    @Insert("insert into db_label.tb_task values(0,#{taskName},#{taskKeys},#{taskCreatUserId},#{taskAuthority},#{taskFileUrl},now(),now(),#{taskTag})")
     int insertTask(Task task);
     //执行sql建表语句
     @Update("${sql}")
