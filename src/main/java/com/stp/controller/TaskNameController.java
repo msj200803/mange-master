@@ -1,6 +1,6 @@
 package com.stp.controller;
 
-import com.stp.entity.Table1;
+import com.stp.entity.tk_tn;
 import com.stp.service.Table1Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +16,11 @@ public class Table1Controller {
 
     // 查询所有
     @RequestMapping("/findAll")
-    public List<Table1> findAll(){
+    public List<tk_tn> findAll(){
         return table1Service.findAll();
     }
     // 根据id查询
-    public Table1 findAllByFields(String fields){
+    public tk_tn findAllByFields(String fields){
         return table1Service.findByFields(fields);
     }
     // 删除

@@ -1,6 +1,6 @@
 package com.stp.service.Impl;
 
-import com.stp.entity.Table1;
+import com.stp.entity.tk_tn;
 import com.stp.mapper.Table1Mapper;
 import com.stp.service.Table1Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,12 @@ public class Table1ServiceImpl implements Table1Service {
     private Table1Mapper table1Mapper;
 
     @Override
-    public List<Table1> findAll() {
-        return table1Mapper.findAll();
+    public List<tk_tn> findAll() {
+        return table1Mapper.selectAll();
     }
 
     @Override
-    public Table1 findByFields(String fields) {
+    public tk_tn findByFields(String fields) {
         return table1Mapper.findByFields(fields);
     }
 
@@ -29,12 +29,12 @@ public class Table1ServiceImpl implements Table1Service {
     }
 
     @Override
-    public void update(Table1 tb1) {
+    public void update(tk_tn tb1) {
         table1Mapper.update(tb1);
     }
 
     @Override
-    public void add(Table1 tb1) {
+    public void add(tk_tn tb1) {
         table1Mapper.add(tb1);
     }
 }

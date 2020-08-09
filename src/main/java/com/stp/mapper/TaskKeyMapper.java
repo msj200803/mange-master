@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 @Mapper
-public interface Table2Mapper {
+public interface Table2Mapper extends tk.mybatis.mapper.common.Mapper<Table2> {
     // 1.查询所有
     List<Table2> findAll();
 
