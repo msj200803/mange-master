@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="Content-Type" content="text/html">
+    <meta content="width=device-width,minimum-scale=1.00001,maximum-scale=1.00001,user-scalable=no,viewport-fit=cover"
+          name="viewport">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <!-- UC默认竖屏 ，UC强制全屏 -->
+    <meta name="wap-font-scale" content="no">
+    <!--<meta name="full-screen" content="yes">-->
+    <!--<meta name="browsermode" content="application">-->
+    <!-- QQ强制竖屏 QQ强制全屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <!--<meta name="x5-fullscreen" content="true">-->
+    <!--<meta name="x5-page-mode" content="app">-->
+    <meta name="format-detection" content="email=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            color: black;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+
+        }
+        #app{
+            height: 100%;
+            width: 100%;
+        }
+        .qus{
+            margin: 0 auto;
+            text-align: center;
+        }
+        .qus_data select{
+            width: 7%;
+            height: 2rem;
+            text-align: center;
+            text-align-last:center;
+        }
+        .qus_Key{
+            width: 20%;
+            height: 2rem;
+        }
+        .qus input{
+            padding-left: 1.1rem;
+            height: 2rem;
+        }
+        .qus{
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+        }
+        .qus_data span{
+            display: inline-block;
+            margin-right: 2%;
+            color: darkgray;
+        }
+        .qus_data{
+            margin: 1rem;
+        }
+        .use_btn button{
+            display: inline-block;
+            width: 20%;
+        }
+
+        .use_btn button{
+            width: 10%;
+            float: right;
+            margin-right: 25%;
+            height: 1.5rem;
+            font-size: 15px;
+        }
+        .sub_btn{
+            margin-top: 3%;
+          text-align: center;
+        }
+        .sub_btn button{
+            width: 25%;
+            height: 3.5rem;
+            margin-bottom: 1%;
+        }
+        .secret{
+            width: 30%;
+            margin: 1% auto;
+            border: 1px solid #f0f0f0;
+        }
+        .qus_secret button{
+
+        }
+        .secret span,input{
+            vertical-align: middle;
+        }
+        #app{
+            padding-top: 1%;
+        }
+        .secret select{
+            width: 20%;
+            height: 2rem;
+            display: inline-block;
+            text-align: center;
+            text-align-last:center;
+            float: left;
+        }
+        .qus_secret select{
+            text-align: center;
+            text-align-last:center;
+            width: 40%;
+        }
+        .qus_authority{
+            text-align: center;
+        }
+        .qus_authority span:nth-of-type(2){
+            display: inline-block;
+            margin-left: 20%;
+        }
+        .qus_authority_data{
+            text-align: left;
+        }
+
+        .qus_authority_data{
+            width: 100%;
+        }
+        .qus_authority_data div{
+
+        }
+        .qus_authority_data_div{
+            display: inline-block;
+            width: 100%;
+        }
+        .qus_authority_data_div div{
+            display: inline-block;
+            width: 50%;
+            height: 5.5rem;
+        }
+        .qus_authority_data_div div:nth-of-type(2){
+            float: right;
+        }
+        .remove_choose_group{
+            margin-left: 1%;
+        }
+    </style>
+    <script src="../../js/vue.min.js"></script>
+    <script src="../../js/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+
+        <div class="qus qus_data" v-for="(item,index) in qusData">
+
+            <div class="qus_data">
+                 <span>字段{{index+1}} </span>
+                <input class="qus_keyid" type="text" placeholder="请输入key">
+                <input class="qus_Key" type="text" placeholder="请输入字段">
+                <select>
+                    <option selected>数据类型</option>
+                    <option>数字</option>
+                    <option>浮点</option>
+                    <option>文字</option>
+                    <option>日期</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="qus_secret">
+            <div class="secret" v-for="(item,index) in secretManSize">
+                <div>
+                    <div class="qus_authority">
+                        <span style="color: red" @click="changePorG">组</span>
+                        <span @click="changePorG">人</span>
+                    </div>
+                    <div class="qus_authority_data">
+                        <div class="qus_authority_data_div" v-show="isporg==0">
+                            <div class="qus_authority_all">
+                                <span>组</span>
+                                <br>
+                                <span v-for="(item,index) in group" v-if="item!=null" :name="item.id" @click="choosautority">
+                                    {{item.groupName}}
+                                </span>
+                            </div>
+                            <div class="qus_authority_choose">
+                                <span>选中的组</span>
+                                    <br>
+                                    <span v-for="(item,index) in chooseGroup" :name="item.id">
+                                        {{item.name}}
+                                        <span class="remove_choose_group" @click="removeChoose">删除</span>
+                                    </span>
+
+                            </div>
+                        </div>
+                        <div class="qus_authority_data_div" v-show="isporg==1">
+                            <div class="qus_authority_all"><span>人</span>
+                                <br>
+                                <span v-for="(item,index) in users" v-if="item!=null" :name="item.id" @click="choosUserautority">
+                                    {{item.userName}}
+                                </span></div>
+                            <div class="qus_authority_choose"><span>选中的人</span>
+                                <br>
+                                <span v-for="(item,index) in chooseUsers" :name="item.id">
+                                        {{item.name}}
+                                        <span class="remove_choose_group" @click="removeUserChoose">删除</span>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="qus name">
+            <input style="margin-top: 1%" type="text" placeholder="请输入任务名称">
+        </div>
+        <div class="qus file">
+            <input style="margin-top: 1%" type="file" accept=".xls,.xlsx,.txt">
+        </div>
+
+        <div class="use_btn">
+            <button @click="addQs">添加字段</button>
+        </div>
+        <div class="sub_btn">
+            <button @click="submitData">提交</button>
+        </div>
+    </div>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            qusData:5,
+            formData:"",
+            secretManSize:1,
+            group:null,
+            chooseGroup:[],
+            users:null,
+            chooseUsers:[],
+            isporg:0,
+        },
+        methods:{
+            choosautority(e){
+                let tag = e.target;
+                let id = tag.getAttribute("name");
+                for (let c in this.chooseGroup){
+                    if (this.chooseGroup[c]!=null&&this.chooseGroup[c].id==id){
+                        return
+                    }
+                }
+                let data = {
+                    id : id,
+                    name : tag.innerText
+                }
+                console.log(this.chooseGroup)
+
+                this.chooseGroup.push(data)
+            },
+            choosUserautority(e){
+
+
+
+                let tag = e.target;
+                let id = tag.getAttribute("name");
+                for (let c in this.chooseUsers){
+                    console.log(this.chooseUsers[c])
+                    if (this.chooseUsers[c]!=null&&this.chooseUsers[c].id==id){
+                        console.log(12)
+                        return
+                    }
+                }
+                let data = {
+                    id : id,
+                    name : tag.innerText
+                }
+
+                this.chooseUsers.push(data)
+            },
+            changePorG(e){
+                let tag  = e.target
+                tag.style.color='red'
+                let last = null;
+                if (tag.innerText=='人'){
+                last = e.target.previousElementSibling
+                    this.isporg = 1
+                }else {
+                    this.isporg = 0
+                    last= e.target.nextElementSibling
+                }
+                console.log(last)
+                last.style.color = 'black'
+
+            },
+            addQs(){
+                this.qusData+=5
+            },
+            removeChoose(e){
+                let tag = e.target.parentNode
+                for (let  i in   this.chooseGroup){
+                    if (this.chooseGroup[i]!=null&&this.chooseGroup[i].id==tag.getAttribute("name")){
+                        this.chooseGroup.pop(i)
+                    }
+                }
+                console.log(this.chooseGroup)
+                tag.remove()
+            },
+            removeUserChoose(e){
+                let tag = e.target.parentNode
+                for (let  i in   this.chooseUsers){
+                    if (this.chooseUsers[i]!=null&&this.chooseUsers[i].id==tag.getAttribute("name")){
+                        this.chooseUsers.pop(i)
+                    }
+                }
+                console.log(this.chooseUsers)
+                tag.remove()
+            },
+            submitData(){
+                let data  = {
+                    keys:[],
+                    authority:null,
+                    file:null,
+                    name:null
+                };
+                let elementsByTagName = document.getElementsByClassName("qus");
+                console.log(elementsByTagName.length)
+                for (let i in elementsByTagName) {
+
+                    let inputs = elementsByTagName[i].getElementsByTagName("input");
+                    console.log(inputs[0])
+
+                    if (i==elementsByTagName.length-1){
+                        console.log(inputs[0])
+                        if (inputs[0].files[0]!=null){
+                            console.log(inputs[0].files[0])
+                            data['file']=inputs[0].files[0]
+                            break;
+                        }else {
+                            alert("请选择文件");
+                            return;
+                        }
+                    }
+                    if (i==elementsByTagName.length-2){
+                        if (inputs[0].value!=null){
+                             data['name']=inputs[0].value
+                            continue
+                        }else {
+                            alert("请填写任务名称");
+                            return;
+                        }
+                    }
+                    if (inputs[0].value==null||inputs[1].value==null||inputs[0].value.length==0||inputs[1].value.length==0){
+                        alert("请填写字段数据!");
+                        return;
+                    }
+                    let select = elementsByTagName[i].getElementsByTagName("select")[0];
+                    if (select.value=='数据类型'||select.value.length==0){
+                        alert("请选择字段类型!")
+                        return
+                    }
+                    let key = {
+                        fileds:"key"+inputs[0].value,
+                        qus:inputs[1].value,
+                        qus_type:select.value
+                    }
+                    data['keys'].push(key);
+                }
+                if (this.chooseGroup.length!=0||this.chooseUsers.length!=0){
+                      let choosedata = {
+                          group:[],
+                          users:[]
+                      };
+                      if (this.chooseGroup.length!=0){
+                           for (let i in this.chooseGroup){
+                               if (this.chooseGroup[i]!=null&&this.chooseGroup[i].id!=null){
+                                   choosedata['group'].push(this.chooseGroup[i].id)
+                               }
+                           }
+                       }
+                    if (this.chooseUsers.length!=0){
+                        for (let i in this.chooseUsers){
+                            if (this.chooseUsers[i]!=null&&this.chooseUsers[i].id!=null){
+                                choosedata['users'].push(this.chooseUsers[i].id)
+                            }
+                        }
+                    }
+                    data.authority = choosedata
+                }else {
+                    alert("请选择权限")
+                    return;
+                }
+                console.log(data)
+                let fd = new FormData();
+                data.keys = JSON.stringify(data.keys)
+                fd.append('keys',data.keys)
+                data.authority = JSON.stringify(data.authority)
+                fd.append('authority',data.authority)
+                fd.append('file',data.file)
+                fd.append('name',data.name)
+                this.createTask(fd);
+            },
+            createTask(data){
+                axios.post("http://localhost:8080/createTask/createTask",data).then(function (response) {
+                    console.log(response)
+                })
+
+            }
+            ,
+            getGroups(){
+                let that = this;
+                axios.get("http://localhost:8080/createTask/getGroup").then(function (response) {
+                    that.group =  response.data.data
+                })
+            }
+            ,
+            getUsers(){
+                let that = this;
+                axios.get("http://localhost:8080/createTask/getUsers").then(function (response) {
+                    that.users =  response.data.data
+                })
+            }
+
+        },
+        created(){
+            this.getGroups()
+            this.getUsers();
+        }
+    })
+</script>
+</body>
+</html>

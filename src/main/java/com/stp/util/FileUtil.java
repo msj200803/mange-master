@@ -31,4 +31,9 @@ public class FileUtil {
         return true;
     }
 
+    public static String readFile(Path path) throws IOException {
+        byte[] bytes = Files.readAllBytes(path);
+        return new String(bytes);
+    }
+
 }

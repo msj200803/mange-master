@@ -10,6 +10,10 @@ spring:
     schema: classpath:sql/table.sql
     data: classpath:sql/data.sql
     initialization-mode: ALWAYS
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
 
 #mybatis的相关配置
 mybatis:

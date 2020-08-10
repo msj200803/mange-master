@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="Content-Type" content="text/html">
+    <meta content="width=device-width,minimum-scale=1.00001,maximum-scale=1.00001,user-scalable=no,viewport-fit=cover"
+          name="viewport">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <!-- UC默认竖屏 ，UC强制全屏 -->
+    <meta name="wap-font-scale" content="no">
+    <!--<meta name="full-screen" content="yes">-->
+    <!--<meta name="browsermode" content="application">-->
+    <!-- QQ强制竖屏 QQ强制全屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <!--<meta name="x5-fullscreen" content="true">-->
+    <!--<meta name="x5-page-mode" content="app">-->
+    <meta name="format-detection" content="email=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta charset="UTF-8">
+    <title>标注后台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+
+        }
+
+        .article {
+            float: left;
+        }
+
+        .article p {
+            text-align: center;
+            font-size: 1.8rem;
+            margin: 1% auto;
+        }
+
+        .article span {
+            text-align: center;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            word-break: break-all;
+        }
+
+        .Data {
+            float: right;
+            color: white;
+        }
+
+        .data_input input {
+            width: 50%;
+            height: 1.5rem;
+            border: 1px solid rgba(228, 228, 228, 0.76);
+            border-radius: 3px;
+        }
+
+        .data_radio input {
+            display: inline-block;
+            height: 1.5rem;
+            width: 20px;
+            outline: none;
+            vertical-align: middle;
+            border: 1px solid rgba(228, 228, 228, 0.76);
+            border-radius: 3px;
+        }
+
+        .data_radio span {
+            display: inline-block;
+            vertical-align: middle;
+
+        }
+
+        .qus {
+            padding: 4%;
+            display: block;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        select {
+            outline: none;
+        }
+
+        option {
+            outline: none;
+        }
+
+        .data_checkbox span, input {
+            vertical-align: middle;
+        }
+
+        .data_checkbox span {
+            margin-right: 0.3rem;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 1.2rem;
+        }
+        .data_input{
+            width: 100%;
+        }
+        .article {
+            text-align: center;
+        }
+
+        .seach {
+            display: inline-block;
+            margin-top: 3%;
+            width: 100%;
+        }
+
+        .seach button {
+            height: 2.0rem;
+        }
+
+        #seach {
+            height: 2.0rem;
+            width: 50%;
+            outline: none;
+        }
+        .data_input span button{
+            height: 1.5rem;
+        }
+        .use_button{
+            text-align: center;
+        }
+        .use_button button{
+            display: inline-block;
+            width: 30%;
+            margin-left: 2rem;
+            height: 2.0rem;
+        }
+    </style>
+    <script src="../../js/vue.min.js"></script>
+    <script src="../../js/axios.min.js"></script>
+</head>
+<body>
+<div id="app" style="width: 100%;height: 100%;">
+    <div class="article" style="background: red;width: 60%;">
+            <span class="seach">            <input @focus="clear" placeholder="全文检索" type="search" id="seach"
+                                                   style="vertical-align: middle"><button style="vertical-align: middle"
+                                                                                          @click="seachData">搜索</button>
+</span>
+        <span class="article_data" onclick="onchoose()" v-html="first"></span>
+    </div>
+    <div class="Data" style="background: black;width: 40%;">
+        <div class="qus" style="background: rebeccapurple" v-for="(item,index) in qs">
+            <span>{{item.qus}}</span>
+            <div class="data_input">
+               <span>
+                    <input onfocus="chooseInput(this)" :keyid="item.fileds" :bqid="index" type="text">
+                <button style="display: none" @click="trueForData">确认</button>
+               </span>
+            </div>
+        </div>
+
+        <div class="use_button">
+            <button @click="submitData">提交</button>
+            <button @click="clearData">清空</button>
+        </div>
+    </div>
+
+</div>
+<script>
+    let choose_Input = null;
+    new Vue({
+        el: "#app",
+        data: {
+            first: "",
+            second:"",
+            threed:null,
+            beifen:"",
+            qs:[],
+            bq:[],
+            day:[],
+            mouth:[],
+            year:[]
+        },
+        methods: {
+            trueForData(e){
+                let c = e.target;
+                let bqid = e.target.previousElementSibling.getAttribute("bqid")
+                if ( c.previousElementSibling.value.length>200){
+                    alert("语句过长")
+                    return
+                }else if (c.previousElementSibling.value.indexOf(' ')!=-1){
+                    alert("如果语句有空格请尝试手动输入或者重新在文章中选择")
+                    return;
+                }
+                c.previousElementSibling.setAttribute("readonly",'readonly')
+                let first = this.second.replace(c.previousElementSibling.value,"<span style='background: yellow'>"+c.previousElementSibling.value.trim()+"</span>");
+
+                this.first = first
+                this.threed = this.threed.replace(c.previousElementSibling.value,'<'+this.bq[bqid]+'>'+c.previousElementSibling.value.trim()+'</'+this.bq[bqid]+'>')
+                this.second=first
+                c.style.display='none'
+                c.previousElementSibling.value= c.previousElementSibling.value.trim();
+            },
+            clearData(){
+                this.threed=this.beifen
+                this.first=this.beifen
+                this.second=this.beifen
+                  let elementsByTagName = document.getElementsByTagName("input");
+                  for (let ii in elementsByTagName){
+                      elementsByTagName[ii].value="";
+                      elementsByTagName[ii].removeAttribute("readonly")
+                  }
+
+            },
+            submitData(){
+              let fileData = this.threed
+              let keyData = [];
+              let qus = document.getElementsByClassName("qus");
+              for (let i=0;i<qus.length;i++){
+                  let input = qus[i].getElementsByTagName("input")[0];
+                  console.log(input)
+                  if (input.value.length>0){
+                      let key = input.getAttribute("keyid");
+                      let key_data = input.value;
+                      let data = {}
+                      data[key]=key_data
+                      console.log(data)
+                      keyData.push(data)
+                  }else {
+                      alert("请输入第"+i+"个框的答案")
+                      return
+                  }
+              }
+              let data = {
+                  fileData : fileData,
+                  keyData : keyData
+              }
+              axios.post("http://localhost:8080/useTask/insertData?taskId=1",data).then(function (response) {
+                    console.log(response)
+              })
+            },
+            seachData() {
+                let a = document.getElementById("seach").value
+                if (a == null || a.length == 0) {
+                    document.getElementsByClassName("article_data")[0].innerHTML = this.wenzhang1
+                    return
+                }
+                let elementsByClassName = document.getElementsByClassName("article_data");
+                for (let i in elementsByClassName) {
+                    let data = elementsByClassName[i].innerHTML.trim();
+                    let s = data.trim().replace(new RegExp(a, 'g'), "<span style='background: yellow'>" + a + "</span>");
+                    elementsByClassName[i].innerHTML = s
+                }
+            },
+            clear() {
+                document.getElementById("seach").value = ""
+                document.getElementsByClassName("article_data")[0].innerHTML = this.first
+            }
+        }, created() {
+            let  that = this;
+            axios.get("http://localhost:8080/useTask/getTask?taskId=1").then(function (response) {
+                that.first = response.data.data.taskFileUrl;
+                that.second=that.first
+                that.beifen=that.first
+                that.threed=that.first
+                that.qs = JSON.parse(response.data.data.taskKeys)
+                that.bq = JSON.parse(response.data.data.taskTag)
+            })
+            // 初始化年
+            this.years=getYear();
+            // 初始化月
+            this.months=getMonth();
+            // 初始化日
+            this.days=getDay();
+        }
+    })
+
+    function onchoose(e) {
+        let a;
+        if (window.getSelection) {//一般浏览器
+            a = window.getSelection();
+        } else if (document.selection) {//IE浏览器、Opera
+            a = document.selection.createRange();
+        }
+        let c = choose_Input;
+        if (c==null){
+            alert("请先选择文本框")
+        }
+        let g = c.nextSibling.nextSibling
+
+        g.style.display='inline-block'
+        c.value = a.toString();
+        choose_Input=null;
+    }
+
+    function chooseInput(e) {
+        let c = e;
+        if (c.getAttribute("readonly")!='readonly'){
+            choose_Input = e
+            let g = c.nextSibling.nextSibling
+            g.style.display='inline-block'
+        }
+    }
+    //得到年
+    function getYear() {
+        let years=[]
+        let myDate= new Date();
+        for (let i =1960;i<=myDate.getFullYear();i++)
+        {
+            years.push(i)
+        }
+        return years;
+    }
+    // 得到月
+    function getMonth() {
+        let months = [];
+        for (let i =1;i<=12;i++){
+            months.push(i);
+        }
+        return months;
+    }
+    // 得到日
+    function getDay() {
+        let day = []
+        for (let i =1;i<=30;i++)
+        {
+            day.push(i)
+        }
+        return day
+    }
+
+
+</script>
+</body>
+</html>
